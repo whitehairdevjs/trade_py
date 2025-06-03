@@ -1,0 +1,14 @@
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+
+model:
+  save_dir: "models"
+
+backtest:
+  initial_cash: 10000000
+  commission: 0.001
+
+kiwoom:
+  id: ""       # .env 로 관리할 경우 비워두고 .env에 저장
+  pw: ""
