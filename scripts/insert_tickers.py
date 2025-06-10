@@ -28,13 +28,19 @@ def fetch_all_tickers(date: str) -> pd.DataFrame:
             continue
 
         for tic in tickers:
-            # 티커 코드만 등록. 종목명은 DB에 넣지 않음.
+            try:
+                name = stock.get_market_ticker_name(tic)
+                if not name:
+                    name = ""
+            except Exception:
+                name = ""
             all_data.append({
                 "ticker": tic,
+                "name"  : name,
                 "market": market_name
             })
 
-    df = pd.DataFrame(all_data, columns=["ticker", "market"])
+    df = pd.DataFrame(all_data, columns=["ticker", "name", "market"])
     return df
 
 
@@ -52,6 +58,7 @@ def insert_into_db(df: pd.DataFrame, conn_params: dict):
         create_sql = """
         CREATE TABLE IF NOT EXISTS krx_tickers (
             ticker VARCHAR(10) PRIMARY KEY,
+            name   VARCHAR(100) NOT null,
             market VARCHAR(10) NOT NULL
         );
         """
@@ -65,10 +72,10 @@ def insert_into_db(df: pd.DataFrame, conn_params: dict):
 
         # 3) DataFrame을 튜플 리스트로 변환 후 bulk insert
         records = df.to_records(index=False)
-        values = [(r["ticker"], r["market"]) for r in records]
+        values = [(r["ticker"], r["name"], r["market"]) for r in records]
 
         insert_sql = """
-        INSERT INTO krx_tickers (ticker, market)
+        INSERT INTO krx_tickers (ticker, name, market)
         VALUES %s
         ON CONFLICT (ticker) DO NOTHING;
         """
