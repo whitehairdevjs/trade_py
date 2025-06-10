@@ -96,9 +96,9 @@ def main():
     conn_params = {
         "host": os.getenv("PGHOST", "localhost"),
         "port": os.getenv("PGPORT", "5432"),
-        "dbname": os.getenv("PGDATABASE", "postgresql"),
+        "dbname": os.getenv("PGDATABASE", "postgres"),
         "user": os.getenv("PGUSER", "postgres"),
-        "password": os.getenv("PDB_KEY", "default"),
+        "password": os.getenv("PDB_KEY", ""),
     }
 
     # 3) 삽입 함수 호출
