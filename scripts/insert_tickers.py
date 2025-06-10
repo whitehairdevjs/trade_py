@@ -1,4 +1,4 @@
-# scripts/insert_tickers.py
+# python scripts\insert_tickers.py
 
 import os
 import sys
